@@ -1,0 +1,80 @@
+import profileImage from "@assets/IMG_20231127_002204_012_1758821976384.jpg";
+
+export default function Hero() {
+  const scrollToAbout = () => {
+    const element = document.getElementById('about');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <section id="home" className="hero-gradient min-h-screen flex items-center pt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="flex flex-col lg:flex-row items-center justify-between">
+          <div className="lg:w-1/2 mb-12 lg:mb-0">
+            <div className="mb-4">
+              <span className="text-lg text-muted-foreground">Hello, It's Me</span>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-4" data-testid="text-hero-name">
+              Nelson Ishmael Chinyere
+            </h1>
+            <div className="text-xl md:text-2xl mb-6">
+              <span>And I'm a </span>
+              <span className="gradient-text font-bold">Software Engineer</span>
+            </div>
+            <p className="text-muted-foreground text-lg mb-8 leading-relaxed max-w-lg" data-testid="text-hero-description">
+              Enthusiastic and detail-oriented Software Engineering student with hands-on experience in IT support and graphic design. Passionate about leveraging technology to solve problems.
+            </p>
+            <div className="flex space-x-4 mb-8">
+              <a 
+                href="https://wa.me/260772752623" 
+                className="w-12 h-12 rounded-full border-2 border-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                data-testid="link-whatsapp"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i className="fab fa-whatsapp text-xl"></i>
+              </a>
+              <a 
+                href="https://github.com/nellishie" 
+                className="w-12 h-12 rounded-full border-2 border-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                data-testid="link-github"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i className="fab fa-github text-xl"></i>
+              </a>
+              <a 
+                href="https://linkedin.com/in/nelson-chinyere-45150a336" 
+                className="w-12 h-12 rounded-full border-2 border-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                data-testid="link-linkedin"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i className="fab fa-linkedin text-xl"></i>
+              </a>
+            </div>
+            <button 
+              onClick={scrollToAbout}
+              className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium hover:bg-primary/80 transition-colors inline-block"
+              data-testid="button-more-about-me"
+            >
+              More About Me
+            </button>
+          </div>
+          <div className="lg:w-1/2 flex justify-center lg:justify-end">
+            <div className="gradient-border profile-glow">
+              <img 
+                src={profileImage} 
+                alt="Nelson Ishmael Chinyere in blue suit" 
+                className="w-72 h-72 object-cover rounded-full"
+                data-testid="img-profile"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

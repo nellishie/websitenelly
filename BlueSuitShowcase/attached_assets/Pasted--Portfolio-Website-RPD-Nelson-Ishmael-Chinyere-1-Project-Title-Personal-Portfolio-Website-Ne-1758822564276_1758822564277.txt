@@ -1,0 +1,129 @@
+📌 Portfolio Website RPD – Nelson Ishmael Chinyere
+1. Project Title
+
+Personal Portfolio Website – Nelson Ishmael Chinyere
+
+2. Purpose
+
+The purpose of this project is to design and develop a personal portfolio website that highlights my professional background, skills, experiences, and achievements in Software Engineering, IT Support, and Graphic Design. The website will also serve as a digital resume and a networking tool by linking to my WhatsApp, GitHub, and LinkedIn profiles.
+
+3. Objectives
+
+Showcase professional summary and career goals.
+
+Display education background, work experience, and technical skills.
+
+Provide quick access to social media platforms (WhatsApp, GitHub, LinkedIn).
+
+Offer a clean, modern, and responsive design for better user experience.
+
+Act as a central hub for personal branding and professional opportunities.
+
+4. Target Audience
+
+Recruiters and employers.
+
+Academic institutions.
+
+Networking contacts (LinkedIn professionals, GitHub collaborators).
+
+Potential clients for IT or graphic design services.
+
+5. Website Sections
+
+Header / Home Section
+
+Name: Nelson Ishmael Chinyere
+
+Tagline: Software Engineering Student | IT Support | Web Development | Project Management
+
+Professional Summary
+
+Enthusiastic and detail-oriented Software Engineering student with hands-on experience in IT support and graphic design. Skilled in programming, web development, networking, and IT project management. Passionate about leveraging technology to solve problems and currently pursuing a Bachelor’s Degree in Software Engineering.
+
+Skills
+
+Programming: Python, Java (OOP)
+
+Web Development: HTML, CSS
+
+Networking & Communication: Data Communication, Computer Networks
+
+IT Management: Project Management, System Troubleshooting, Technical Support
+
+Design Tools: Graphic Design (Adobe Tools, Canva)
+
+Agile Methodologies
+
+Experience
+
+Dico Interiors | Harare, Zimbabwe
+Graphic Designer (Dec 2024 – Feb 2025)
+
+Produced high-quality product packaging designs.
+
+Designed user interfaces for apps and websites.
+
+Assisted video production with motion graphics.
+
+Updated social media profiles with fresh graphics.
+
+Coverlink Holdings | Harare, Zimbabwe
+IT Technician (Jun 2024 – Aug 2024)
+
+Managed IT backups and infrastructure plans.
+
+Maintained systems and performed troubleshooting.
+
+Kept IT asset records and ensured system security.
+
+ZCAS University | Lusaka, Zambia
+Web Developer (Mar 2024 – Apr 2024)
+
+Developed a website Wina Bwangu for transactions.
+
+Education
+
+Bachelor’s Degree in Software Engineering – ZCAS University (Expected Aug 2027)
+
+National Foundation Certificate in Computer Operations & Packages – Harare Polytechnic (Dec 2021)
+
+National Foundation Certificate in ICT Fundamentals – Harare Polytechnic (Dec 2021)
+
+Languages
+
+English – Upper Intermediate (B2)
+
+Shona – Advanced (C1)
+
+Contact & Social Media Section
+
+Location: Lusaka, Zambia
+
+Phone: +260772752623
+
+Email: nellishie32@gmail.com
+
+Icons (clickable links):
+
+WhatsApp → wa.me/260772752623
+
+GitHub → github.com/nellishie
+
+LinkedIn → linkedin.com/in/nelson-chinyere-45150a336
+
+Footer
+
+“© 2025 Nelson Ishmael Chinyere | Portfolio”
+
+6. Tools & Technologies
+
+Frontend: HTML, CSS, JavaScript
+
+Icons: Font Awesome (for WhatsApp, GitHub, LinkedIn)
+
+Hosting: Replit (initial deployment), later optional on Vercel/Netlify
+
+7. Expected Outcome
+
+A responsive, professional, and easy-to-navigate portfolio website that acts as my digital identity, helping me stand out to employers, collaborators, and recruiters.
