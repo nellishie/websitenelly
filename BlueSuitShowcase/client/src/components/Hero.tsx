@@ -1,11 +1,50 @@
+import { useState, useEffect } from "react";
 import profileImage from "@assets/IMG_20231127_002204_012_1758821976384.jpg";
 
+const roles = [
+  'Software Engineer',
+  'Web Developer', 
+  'Software Developer',
+  'Data Analyst'
+];
+
 export default function Hero() {
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentRole = roles[currentRoleIndex];
+    const timeout = setTimeout(() => {
+      if (!isDeleting && displayText !== currentRole) {
+        setDisplayText(currentRole.slice(0, displayText.length + 1));
+      } else if (isDeleting && displayText !== '') {
+        setDisplayText(currentRole.slice(0, displayText.length - 1));
+      } else if (!isDeleting && displayText === currentRole) {
+        setTimeout(() => setIsDeleting(true), 1500);
+      } else if (isDeleting && displayText === '') {
+        setIsDeleting(false);
+        setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
+      }
+    }, isDeleting ? 50 : 100);
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, currentRoleIndex]);
+
   const scrollToAbout = () => {
     const element = document.getElementById('about');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const downloadCV = () => {
+    // Create a link to download the CV file
+    const link = document.createElement('a');
+    link.href = '/Nelson_Chinyere_CV.pdf';
+    link.download = 'Nelson_Chinyere_CV.pdf';
+    link.target = '_blank';
+    link.click();
   };
 
   return (
@@ -21,7 +60,7 @@ export default function Hero() {
             </h1>
             <div className="text-xl md:text-2xl mb-6">
               <span>And I'm a </span>
-              <span className="gradient-text font-bold">Software Engineer</span>
+              <span className="gradient-text font-bold">{displayText}<span className="animate-pulse">|</span></span>
             </div>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed max-w-lg" data-testid="text-hero-description">
               Enthusiastic and detail-oriented Software Engineering student with hands-on experience in IT support and graphic design. Passionate about leveraging technology to solve problems.
@@ -55,13 +94,23 @@ export default function Hero() {
                 <i className="fab fa-linkedin text-xl"></i>
               </a>
             </div>
-            <button 
-              onClick={scrollToAbout}
-              className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium hover:bg-primary/80 transition-colors inline-block"
-              data-testid="button-more-about-me"
-            >
-              More About Me
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button 
+                onClick={scrollToAbout}
+                className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium hover:bg-primary/80 transition-colors"
+                data-testid="button-more-about-me"
+              >
+                More About Me
+              </button>
+              <button 
+                onClick={downloadCV}
+                className="bg-secondary text-secondary-foreground px-8 py-3 rounded-full font-medium hover:bg-secondary/80 transition-colors flex items-center gap-2"
+                data-testid="button-download-cv"
+              >
+                <i className="fas fa-download"></i>
+                Download My CV
+              </button>
+            </div>
           </div>
           <div className="lg:w-1/2 flex justify-center lg:justify-end">
             <div className="gradient-border profile-glow">
