@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, serial } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, serial, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -29,6 +29,15 @@ export const skills = pgTable("skills", {
   order: integer("order").notNull().default(0),
 });
 
+export const cvFiles = pgTable("cv_files", {
+  id: serial("id").primaryKey(),
+  filename: text("filename").notNull(),
+  originalName: text("original_name").notNull(),
+  fileData: text("file_data").notNull(),
+  uploadedAt: timestamp("uploaded_at").notNull().defaultNow(),
+  isActive: boolean("is_active").notNull().default(false),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -36,6 +45,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export const insertExperienceSchema = createInsertSchema(experiences).omit({ id: true });
 export const insertSkillSchema = createInsertSchema(skills).omit({ id: true });
+export const insertCvFileSchema = createInsertSchema(cvFiles).omit({ id: true, uploadedAt: true });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -43,3 +53,5 @@ export type Experience = typeof experiences.$inferSelect;
 export type InsertExperience = z.infer<typeof insertExperienceSchema>;
 export type Skill = typeof skills.$inferSelect;
 export type InsertSkill = z.infer<typeof insertSkillSchema>;
+export type CvFile = typeof cvFiles.$inferSelect;
+export type InsertCvFile = z.infer<typeof insertCvFileSchema>;
