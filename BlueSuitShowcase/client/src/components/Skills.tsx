@@ -1,62 +1,37 @@
+import { useState, useEffect } from 'react';
+import { Skill } from '@shared/schema';
+
 export default function Skills() {
-  const skills = [
-    {
-      icon: "fab fa-python",
-      title: "Python",
-      category: "Programming",
-      bgColor: "bg-primary/10",
-      iconColor: "text-primary"
-    },
-    {
-      icon: "fab fa-java",
-      title: "Java",
-      category: "OOP Programming",
-      bgColor: "bg-secondary/10",
-      iconColor: "text-secondary"
-    },
-    {
-      icon: "fab fa-html5",
-      title: "HTML5",
-      category: "Web Development",
-      bgColor: "bg-accent/10",
-      iconColor: "text-accent"
-    },
-    {
-      icon: "fab fa-css3-alt",
-      title: "CSS3",
-      category: "Styling & Layout",
-      bgColor: "bg-primary/10",
-      iconColor: "text-primary"
-    },
-    {
-      icon: "fas fa-network-wired",
-      title: "Networking",
-      category: "Communication",
-      bgColor: "bg-secondary/10",
-      iconColor: "text-secondary"
-    },
-    {
-      icon: "fas fa-project-diagram",
-      title: "Project Mgmt",
-      category: "IT Management",
-      bgColor: "bg-accent/10",
-      iconColor: "text-accent"
-    },
-    {
-      icon: "fab fa-adobe",
-      title: "Adobe Tools",
-      category: "Design Tools",
-      bgColor: "bg-primary/10",
-      iconColor: "text-primary"
-    },
-    {
-      icon: "fas fa-tasks",
-      title: "Agile",
-      category: "Methodologies",
-      bgColor: "bg-secondary/10",
-      iconColor: "text-secondary"
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSkills();
+  }, []);
+
+  const fetchSkills = async () => {
+    try {
+      const response = await fetch('/api/skills');
+      if (response.ok) {
+        const data = await response.json();
+        setSkills(data);
+      }
+    } catch (error) {
+      console.error('Error fetching skills:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  if (loading) {
+    return (
+      <section id="skills" className="py-20 bg-muted/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-muted-foreground">Loading skills...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="skills" className="py-20 bg-muted/20">

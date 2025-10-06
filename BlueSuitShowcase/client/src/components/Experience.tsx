@@ -1,38 +1,37 @@
+import { useState, useEffect } from 'react';
+import { Experience as ExperienceType } from '@shared/schema';
+
 export default function Experience() {
-  const experiences = [
-    {
-      title: "Graphic Designer",
-      company: "Dico Interiors",
-      location: "Harare, Zimbabwe",
-      period: "Dec 2024 – Feb 2025",
-      responsibilities: [
-        "Produced high-quality product packaging designs",
-        "Designed user interfaces for apps and websites",
-        "Assisted video production with motion graphics",
-        "Updated social media profiles with fresh graphics"
-      ]
-    },
-    {
-      title: "IT Technician",
-      company: "Coverlink Holdings",
-      location: "Harare, Zimbabwe",
-      period: "Jun 2024 – Aug 2024",
-      responsibilities: [
-        "Managed IT backups and infrastructure plans",
-        "Maintained systems and performed troubleshooting",
-        "Kept IT asset records and ensured system security"
-      ]
-    },
-    {
-      title: "Web Developer",
-      company: "ZCAS University",
-      location: "Lusaka, Zambia",
-      period: "Mar 2024 – Apr 2024",
-      responsibilities: [
-        "Developed a website \"Wina Bwangu\" for transactions"
-      ]
+  const [experiences, setExperiences] = useState<ExperienceType[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchExperiences();
+  }, []);
+
+  const fetchExperiences = async () => {
+    try {
+      const response = await fetch('/api/experiences');
+      if (response.ok) {
+        const data = await response.json();
+        setExperiences(data);
+      }
+    } catch (error) {
+      console.error('Error fetching experiences:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  if (loading) {
+    return (
+      <section id="experience" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-muted-foreground">Loading experiences...</p>
+        </div>
+      </section>
+    );
+  }
 
   const education = [
     {
