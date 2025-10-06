@@ -37,13 +37,30 @@ export default function Hero() {
     }
   };
 
-  const downloadCV = () => {
-    // Create a link to download the CV file
-    const link = document.createElement('a');
-    link.href = '/My_CV_1759058330378.pdf';
-    link.download = 'My_CV_1759058330378.pdf';
-    link.target = '_blank';
-    link.click();
+  const downloadCV = async () => {
+    try {
+      const response = await fetch('/api/cv/download');
+      
+      if (!response.ok) {
+        alert('No CV available for download. Please contact the administrator.');
+        return;
+      }
+
+      const blob = await response.blob();
+      const contentDisposition = response.headers.get('content-disposition');
+      const filenameMatch = contentDisposition?.match(/filename="(.+)"/);
+      const filename = filenameMatch ? filenameMatch[1] : 'CV.pdf';
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading CV:', error);
+      alert('Failed to download CV. Please try again later.');
+    }
   };
 
   return (
