@@ -94,7 +94,7 @@ export default function Hero() {
                 <i className="fab fa-linkedin text-xl"></i>
               </a>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 items-start">
+            <div className="flex flex-col sm:flex-row gap-4">
               <button 
                 onClick={scrollToAbout}
                 className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium hover:bg-primary/80 transition-colors"
@@ -102,24 +102,24 @@ export default function Hero() {
               >
                 More About Me
               </button>
-              <div className="flex items-center gap-4">
-                <button 
-                  onClick={downloadCV}
-                  className="bg-secondary text-secondary-foreground px-8 py-3 rounded-full font-medium hover:bg-secondary/80 transition-colors flex items-center gap-2"
-                  data-testid="button-download-cv"
-                >
-                  <i className="fas fa-download"></i>
-                  Download My CV
-                </button>
-                <div className="gradient-border profile-glow">
-                  <img 
-                    src={profileImage} 
-                    alt="Nelson Ishmael Chinyere in blue suit" 
-                    className="w-16 h-16 object-cover rounded-full"
-                    data-testid="img-profile"
-                  />
-                </div>
-              </div>
+              <button 
+                onClick={downloadCV}
+                className="bg-secondary text-secondary-foreground px-8 py-3 rounded-full font-medium hover:bg-secondary/80 transition-colors flex items-center gap-2"
+                data-testid="button-download-cv"
+              >
+                <i className="fas fa-download"></i>
+                Download My CV
+              </button>
+            </div>
+          </div>
+          <div className="lg:w-1/2 flex justify-center lg:justify-end">
+            <div className="gradient-border profile-glow">
+              <img 
+                src={profileImage} 
+                alt="Nelson Ishmael Chinyere in blue suit" 
+                className="w-72 h-72 object-cover rounded-full"
+                data-testid="img-profile"
+              />
             </div>
           </div>
         </div>
