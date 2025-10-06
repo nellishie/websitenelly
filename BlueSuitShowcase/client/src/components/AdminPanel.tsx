@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Experience, Skill } from '@shared/schema';
+import { useState, useEffect } from 'react';
+import { Experience, Skill, CvFile } from '@shared/schema';
 
 interface AdminPanelProps {
   experiences: Experience[];
@@ -11,11 +11,13 @@ interface AdminPanelProps {
 export default function AdminPanel({ experiences, skills, onExperiencesUpdate, onSkillsUpdate }: AdminPanelProps) {
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [activeTab, setActiveTab] = useState<'experiences' | 'skills'>('experiences');
+  const [activeTab, setActiveTab] = useState<'experiences' | 'skills' | 'cv'>('experiences');
   const [editingExp, setEditingExp] = useState<Experience | null>(null);
   const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
   const [showAddExp, setShowAddExp] = useState(false);
   const [showAddSkill, setShowAddSkill] = useState(false);
+  const [cvFiles, setCvFiles] = useState<CvFile[]>([]);
+  const [uploading, setUploading] = useState(false);
 
   const handleLogin = () => {
     if (password) {
@@ -90,6 +92,81 @@ export default function AdminPanel({ experiences, skills, onExperiencesUpdate, o
     }
   };
 
+  const fetchCvFiles = async () => {
+    const response = await makeAuthenticatedRequest('/api/admin/cv', {
+      method: 'GET',
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setCvFiles(data);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated && activeTab === 'cv') {
+      fetchCvFiles();
+    }
+  }, [isAuthenticated, activeTab]);
+
+  const handleUploadCV = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      alert('Please upload a PDF file');
+      return;
+    }
+
+    setUploading(true);
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64 = e.target?.result as string;
+      const fileData = base64.split(',')[1];
+
+      const response = await makeAuthenticatedRequest('/api/admin/cv', {
+        method: 'POST',
+        body: JSON.stringify({
+          filename: file.name,
+          originalName: file.name,
+          fileData,
+        }),
+      });
+
+      if (response.ok) {
+        await fetchCvFiles();
+        event.target.value = '';
+      } else {
+        alert('Failed to upload CV');
+      }
+      setUploading(false);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleActivateCV = async (id: number) => {
+    const response = await makeAuthenticatedRequest(`/api/admin/cv/${id}/activate`, {
+      method: 'PUT',
+    });
+
+    if (response.ok) {
+      await fetchCvFiles();
+    }
+  };
+
+  const handleDeleteCV = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this CV?')) return;
+
+    const response = await makeAuthenticatedRequest(`/api/admin/cv/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      await fetchCvFiles();
+    }
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
@@ -147,6 +224,16 @@ export default function AdminPanel({ experiences, skills, onExperiencesUpdate, o
             }`}
           >
             Skills
+          </button>
+          <button
+            onClick={() => setActiveTab('cv')}
+            className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+              activeTab === 'cv'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted hover:bg-muted/80'
+            }`}
+          >
+            CV Files
           </button>
         </div>
 
@@ -283,6 +370,81 @@ export default function AdminPanel({ experiences, skills, onExperiencesUpdate, o
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'cv' && (
+          <div>
+            <div className="mb-6">
+              <label className="inline-block px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-medium hover:bg-secondary/80 cursor-pointer">
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleUploadCV}
+                  className="hidden"
+                  disabled={uploading}
+                />
+                {uploading ? 'Uploading...' : 'Upload New CV'}
+              </label>
+              <p className="text-sm text-muted-foreground mt-2">
+                Only PDF files are accepted. Click on a CV to make it active for download.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {cvFiles.length === 0 ? (
+                <div className="bg-card p-8 rounded-xl border border-border text-center">
+                  <i className="fas fa-file-pdf text-4xl text-muted-foreground mb-4"></i>
+                  <p className="text-muted-foreground">No CV files uploaded yet</p>
+                </div>
+              ) : (
+                cvFiles.map((cv) => (
+                  <div
+                    key={cv.id}
+                    className={`bg-card p-6 rounded-xl border ${
+                      cv.isActive ? 'border-primary' : 'border-border'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 ${cv.isActive ? 'bg-primary/10' : 'bg-muted'} rounded-full flex items-center justify-center`}>
+                          <i className={`fas fa-file-pdf ${cv.isActive ? 'text-primary' : 'text-muted-foreground'} text-xl`}></i>
+                        </div>
+                        <div>
+                          <h3 className="font-semibold flex items-center gap-2">
+                            {cv.originalName}
+                            {cv.isActive && (
+                              <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">
+                                Active
+                              </span>
+                            )}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Uploaded: {new Date(cv.uploadedAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        {!cv.isActive && (
+                          <button
+                            onClick={() => handleActivateCV(cv.id)}
+                            className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/80"
+                          >
+                            Set Active
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleDeleteCV(cv.id)}
+                          className="px-4 py-2 bg-destructive text-destructive-foreground rounded hover:bg-destructive/80"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         )}
       </div>
