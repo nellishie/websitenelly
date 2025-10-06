@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import profileImage from "@assets/IMG_20231127_002204_012_1758821976384.jpg";
 
 const roles = [
   'Software Engineer',
@@ -110,16 +109,6 @@ export default function Hero() {
                 <i className="fas fa-download"></i>
                 Download My CV
               </button>
-            </div>
-          </div>
-          <div className="lg:w-1/2 w-full flex justify-center lg:justify-end">
-            <div className="gradient-border profile-glow">
-              <img 
-                src={profileImage} 
-                alt="Nelson Ishmael Chinyere in blue suit" 
-                className="w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 object-cover rounded-full"
-                data-testid="img-profile"
-              />
             </div>
           </div>
         </div>

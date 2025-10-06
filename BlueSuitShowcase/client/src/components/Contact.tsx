@@ -1,4 +1,5 @@
 import { useState } from "react";
+import profileImage from "@assets/IMG_20231127_002204_012_1758821976384.jpg";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -70,6 +71,16 @@ export default function Contact() {
         
         <div className="grid md:grid-cols-2 gap-12">
           <div>
+            <div className="mb-8 flex justify-center md:justify-start">
+              <div className="gradient-border profile-glow">
+                <img 
+                  src={profileImage} 
+                  alt="Nelson Ishmael Chinyere in blue suit" 
+                  className="w-48 h-48 md:w-56 md:h-56 object-cover rounded-full"
+                  data-testid="img-profile"
+                />
+              </div>
+            </div>
             <h3 className="text-2xl font-semibold mb-8">Let's work together</h3>
             <div className="space-y-6">
               <div className="flex items-center" data-testid="contact-location">
