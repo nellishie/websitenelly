@@ -41,8 +41,8 @@ export default function Hero() {
   const downloadCV = () => {
     // Create a link to download the CV file
     const link = document.createElement('a');
-    link.href = '/Nelson_Chinyere_CV.pdf';
-    link.download = 'Nelson_Chinyere_CV.pdf';
+    link.href = '/My_CV_1759058330378.pdf';
+    link.download = 'My_CV_1759058330378.pdf';
     link.target = '_blank';
     link.click();
   };
