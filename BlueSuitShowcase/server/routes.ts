@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { sendEmail } from "./utils/replitmail";
 import { z } from "zod";
 import rateLimit from "express-rate-limit";
+import { requireAdmin } from "./middleware/auth";
+import { insertExperienceSchema, insertSkillSchema } from "@shared/schema";
 
 // Contact form validation schema
 const contactSchema = z.object({
@@ -83,6 +85,123 @@ This message was sent from your portfolio contact form.`,
           message: 'Failed to send email. Please try again or contact directly.' 
         });
       }
+    }
+  });
+
+  // Public endpoints for fetching experiences and skills
+  app.get('/api/experiences', async (req, res) => {
+    try {
+      const experiences = await storage.getExperiences();
+      res.json(experiences);
+    } catch (error) {
+      console.error('Error fetching experiences:', error);
+      res.status(500).json({ error: 'Failed to fetch experiences' });
+    }
+  });
+
+  app.get('/api/skills', async (req, res) => {
+    try {
+      const skills = await storage.getSkills();
+      res.json(skills);
+    } catch (error) {
+      console.error('Error fetching skills:', error);
+      res.status(500).json({ error: 'Failed to fetch skills' });
+    }
+  });
+
+  // Admin endpoints for managing experiences
+  app.post('/api/admin/experiences', requireAdmin, async (req, res) => {
+    try {
+      const validatedData = insertExperienceSchema.parse(req.body);
+      const experience = await storage.createExperience(validatedData);
+      res.json(experience);
+    } catch (error) {
+      console.error('Error creating experience:', error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: 'Validation error', details: error.errors });
+      } else {
+        res.status(500).json({ error: 'Failed to create experience' });
+      }
+    }
+  });
+
+  app.put('/api/admin/experiences/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertExperienceSchema.partial().parse(req.body);
+      const experience = await storage.updateExperience(id, validatedData);
+      
+      if (!experience) {
+        return res.status(404).json({ error: 'Experience not found' });
+      }
+      
+      res.json(experience);
+    } catch (error) {
+      console.error('Error updating experience:', error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: 'Validation error', details: error.errors });
+      } else {
+        res.status(500).json({ error: 'Failed to update experience' });
+      }
+    }
+  });
+
+  app.delete('/api/admin/experiences/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteExperience(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting experience:', error);
+      res.status(500).json({ error: 'Failed to delete experience' });
+    }
+  });
+
+  // Admin endpoints for managing skills
+  app.post('/api/admin/skills', requireAdmin, async (req, res) => {
+    try {
+      const validatedData = insertSkillSchema.parse(req.body);
+      const skill = await storage.createSkill(validatedData);
+      res.json(skill);
+    } catch (error) {
+      console.error('Error creating skill:', error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: 'Validation error', details: error.errors });
+      } else {
+        res.status(500).json({ error: 'Failed to create skill' });
+      }
+    }
+  });
+
+  app.put('/api/admin/skills/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertSkillSchema.partial().parse(req.body);
+      const skill = await storage.updateSkill(id, validatedData);
+      
+      if (!skill) {
+        return res.status(404).json({ error: 'Skill not found' });
+      }
+      
+      res.json(skill);
+    } catch (error) {
+      console.error('Error updating skill:', error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: 'Validation error', details: error.errors });
+      } else {
+        res.status(500).json({ error: 'Failed to update skill' });
+      }
+    }
+  });
+
+  app.delete('/api/admin/skills/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteSkill(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting skill:', error);
+      res.status(500).json({ error: 'Failed to delete skill' });
     }
   });
 
