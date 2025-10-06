@@ -10,9 +10,11 @@ import {
   skills
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/neon-serverless";
-import { Pool } from "@neondatabase/serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
 import { eq, asc } from "drizzle-orm";
+import ws from "ws";
 
+neonConfig.webSocketConstructor = ws;
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 export const db = drizzle({ client: pool });
 
