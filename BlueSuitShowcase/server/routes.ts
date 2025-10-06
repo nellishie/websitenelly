@@ -205,6 +205,92 @@ This message was sent from your portfolio contact form.`,
     }
   });
 
+  // Public endpoints for CV
+  app.get('/api/cv/active', async (req, res) => {
+    try {
+      const activeCv = await storage.getActiveCv();
+      if (!activeCv) {
+        return res.status(404).json({ error: 'No CV available' });
+      }
+      res.json({ filename: activeCv.originalName });
+    } catch (error) {
+      console.error('Error fetching active CV:', error);
+      res.status(500).json({ error: 'Failed to fetch CV' });
+    }
+  });
+
+  app.get('/api/cv/download', async (req, res) => {
+    try {
+      const activeCv = await storage.getActiveCv();
+      if (!activeCv) {
+        return res.status(404).json({ error: 'No CV available' });
+      }
+
+      const buffer = Buffer.from(activeCv.fileData, 'base64');
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${activeCv.originalName}"`);
+      res.send(buffer);
+    } catch (error) {
+      console.error('Error downloading CV:', error);
+      res.status(500).json({ error: 'Failed to download CV' });
+    }
+  });
+
+  // Admin endpoints for managing CVs
+  app.get('/api/admin/cv', requireAdmin, async (req, res) => {
+    try {
+      const cvFiles = await storage.getCvFiles();
+      res.json(cvFiles);
+    } catch (error) {
+      console.error('Error fetching CV files:', error);
+      res.status(500).json({ error: 'Failed to fetch CV files' });
+    }
+  });
+
+  app.post('/api/admin/cv', requireAdmin, async (req, res) => {
+    try {
+      const { filename, originalName, fileData } = req.body;
+      
+      if (!filename || !originalName || !fileData) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      const cvFile = await storage.createCvFile({
+        filename,
+        originalName,
+        fileData,
+        isActive: false
+      });
+
+      res.json(cvFile);
+    } catch (error) {
+      console.error('Error uploading CV:', error);
+      res.status(500).json({ error: 'Failed to upload CV' });
+    }
+  });
+
+  app.put('/api/admin/cv/:id/activate', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.setActiveCv(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error activating CV:', error);
+      res.status(500).json({ error: 'Failed to activate CV' });
+    }
+  });
+
+  app.delete('/api/admin/cv/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteCvFile(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting CV:', error);
+      res.status(500).json({ error: 'Failed to delete CV' });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
