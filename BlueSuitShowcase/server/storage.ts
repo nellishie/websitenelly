@@ -5,13 +5,16 @@ import {
   type InsertExperience,
   type Skill,
   type InsertSkill,
+  type CvFile,
+  type InsertCvFile,
   users,
   experiences,
-  skills
+  skills,
+  cvFiles
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/neon-serverless";
 import { Pool, neonConfig } from "@neondatabase/serverless";
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, desc } from "drizzle-orm";
 import ws from "ws";
 
 neonConfig.webSocketConstructor = ws;
@@ -34,6 +37,12 @@ export interface IStorage {
   createSkill(skill: InsertSkill): Promise<Skill>;
   updateSkill(id: number, skill: Partial<InsertSkill>): Promise<Skill | undefined>;
   deleteSkill(id: number): Promise<void>;
+  
+  getCvFiles(): Promise<CvFile[]>;
+  getActiveCv(): Promise<CvFile | undefined>;
+  createCvFile(cvFile: InsertCvFile): Promise<CvFile>;
+  setActiveCv(id: number): Promise<void>;
+  deleteCvFile(id: number): Promise<void>;
 }
 
 export class DbStorage implements IStorage {
@@ -96,6 +105,29 @@ export class DbStorage implements IStorage {
 
   async deleteSkill(id: number): Promise<void> {
     await db.delete(skills).where(eq(skills.id, id));
+  }
+
+  async getCvFiles(): Promise<CvFile[]> {
+    return await db.select().from(cvFiles).orderBy(desc(cvFiles.uploadedAt));
+  }
+
+  async getActiveCv(): Promise<CvFile | undefined> {
+    const result = await db.select().from(cvFiles).where(eq(cvFiles.isActive, true));
+    return result[0];
+  }
+
+  async createCvFile(cvFile: InsertCvFile): Promise<CvFile> {
+    const result = await db.insert(cvFiles).values(cvFile).returning();
+    return result[0];
+  }
+
+  async setActiveCv(id: number): Promise<void> {
+    await db.update(cvFiles).set({ isActive: false });
+    await db.update(cvFiles).set({ isActive: true }).where(eq(cvFiles.id, id));
+  }
+
+  async deleteCvFile(id: number): Promise<void> {
+    await db.delete(cvFiles).where(eq(cvFiles.id, id));
   }
 }
 
