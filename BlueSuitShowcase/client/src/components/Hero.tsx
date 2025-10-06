@@ -62,6 +62,16 @@ export default function Hero() {
               <span>And I'm a </span>
               <span className="gradient-text font-bold">{displayText}<span className="animate-pulse">|</span></span>
             </div>
+            <div className="mb-8 flex justify-center lg:justify-start">
+              <div className="gradient-border profile-glow">
+                <img 
+                  src={profileImage} 
+                  alt="Nelson Ishmael Chinyere in blue suit" 
+                  className="w-72 h-72 object-cover rounded-full"
+                  data-testid="img-profile"
+                />
+              </div>
+            </div>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed max-w-lg" data-testid="text-hero-description">
               Enthusiastic and detail-oriented Software Engineering student with hands-on experience in IT support and graphic design. Passionate about leveraging technology to solve problems.
             </p>
@@ -110,16 +120,6 @@ export default function Hero() {
                 <i className="fas fa-download"></i>
                 Download My CV
               </button>
-            </div>
-          </div>
-          <div className="lg:w-1/2 flex justify-center lg:justify-end">
-            <div className="gradient-border profile-glow">
-              <img 
-                src={profileImage} 
-                alt="Nelson Ishmael Chinyere in blue suit" 
-                className="w-72 h-72 object-cover rounded-full"
-                data-testid="img-profile"
-              />
             </div>
           </div>
         </div>
