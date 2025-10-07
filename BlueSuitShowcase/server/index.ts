@@ -198,6 +198,6 @@ async function seedDatabaseIfEmpty() {
       log('Skills seeded successfully');
     }
   } catch (error) {
-    log(`Error seeding database: ${error}`);
+    log(`Error seeding database:`, error instanceof Error ? error.message : JSON.stringify(error, null, 2));
   }
 }

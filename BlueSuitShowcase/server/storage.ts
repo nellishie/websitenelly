@@ -17,7 +17,17 @@ import { Pool, neonConfig } from "@neondatabase/serverless";
 import { eq, asc, desc } from "drizzle-orm";
 import ws from "ws";
 
-neonConfig.webSocketConstructor = ws;
+class CustomWebSocket extends ws {
+  constructor(address: string | URL, options?: any) {
+    const wsOptions = {
+      ...options,
+      rejectUnauthorized: false
+    };
+    super(address, wsOptions);
+  }
+}
+
+neonConfig.webSocketConstructor = CustomWebSocket as any;
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 export const db = drizzle({ client: pool });
 
