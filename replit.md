@@ -15,7 +15,7 @@ Preferred communication style: Simple, everyday language.
 **Framework and Build Tools**
 - React 18 with TypeScript for type-safe component development
 - Vite as the build tool and development server for fast hot module replacement
-- Component-based architecture with modular sections (Hero, About, Services, Skills, Experience, Contact, Footer)
+- Component-based architecture with modular sections (Hero, About, Services, Skills, Experience, Achievements, Contact, Footer)
 
 **UI Component System**
 - shadcn/ui design system built on Radix UI primitives for accessible, composable components
@@ -34,6 +34,7 @@ Preferred communication style: Simple, everyday language.
 - Rate-limited contact form with email integration
 - Admin panel with keyboard shortcut access (Ctrl+Shift+A)
 - CV download functionality
+- Achievements gallery with certificate display and modal detail view
 
 ### Backend Architecture
 
@@ -56,6 +57,7 @@ Preferred communication style: Simple, everyday language.
 - `/api/contact` - Contact form submissions
 - `/api/experiences` - Experience CRUD operations
 - `/api/skills` - Skills CRUD operations
+- `/api/achievements` - Achievements and certifications retrieval
 - Admin routes protected by `requireAdmin` middleware
 
 ### Data Storage Solutions
@@ -69,6 +71,7 @@ Preferred communication style: Simple, everyday language.
 - `users` table: UUID primary key, username/password authentication
 - `experiences` table: Serial ID, job details, responsibilities array, ordering
 - `skills` table: Serial ID, icon class, category, styling properties, ordering
+- `achievements` table: Serial ID, title, issuer, date, description, image URL, category, ordering
 
 **Data Access Layer**
 - `DbStorage` class implementing `IStorage` interface for abstraction
