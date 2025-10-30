@@ -5,7 +5,7 @@ import { sendEmail } from "./utils/replitmail";
 import { z } from "zod";
 import rateLimit from "express-rate-limit";
 import { requireAdmin } from "./middleware/auth";
-import { insertExperienceSchema, insertSkillSchema } from "@shared/schema";
+import { insertExperienceSchema, insertSkillSchema, insertAchievementSchema } from "@shared/schema";
 
 // Contact form validation schema
 const contactSchema = z.object({
@@ -106,6 +106,16 @@ This message was sent from your portfolio contact form.`,
     } catch (error) {
       console.error('Error fetching skills:', error);
       res.status(500).json({ error: 'Failed to fetch skills' });
+    }
+  });
+
+  app.get('/api/achievements', async (req, res) => {
+    try {
+      const achievements = await storage.getAchievements();
+      res.json(achievements);
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
+      res.status(500).json({ error: 'Failed to fetch achievements' });
     }
   });
 

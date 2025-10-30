@@ -7,10 +7,13 @@ import {
   type InsertSkill,
   type CvFile,
   type InsertCvFile,
+  type Achievement,
+  type InsertAchievement,
   users,
   experiences,
   skills,
-  cvFiles
+  cvFiles,
+  achievements
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/neon-serverless";
 import { Pool, neonConfig } from "@neondatabase/serverless";
@@ -53,6 +56,12 @@ export interface IStorage {
   createCvFile(cvFile: InsertCvFile): Promise<CvFile>;
   setActiveCv(id: number): Promise<void>;
   deleteCvFile(id: number): Promise<void>;
+  
+  getAchievements(): Promise<Achievement[]>;
+  getAchievement(id: number): Promise<Achievement | undefined>;
+  createAchievement(achievement: InsertAchievement): Promise<Achievement>;
+  updateAchievement(id: number, achievement: Partial<InsertAchievement>): Promise<Achievement | undefined>;
+  deleteAchievement(id: number): Promise<void>;
 }
 
 export class DbStorage implements IStorage {
@@ -138,6 +147,29 @@ export class DbStorage implements IStorage {
 
   async deleteCvFile(id: number): Promise<void> {
     await db.delete(cvFiles).where(eq(cvFiles.id, id));
+  }
+
+  async getAchievements(): Promise<Achievement[]> {
+    return await db.select().from(achievements).orderBy(asc(achievements.order));
+  }
+
+  async getAchievement(id: number): Promise<Achievement | undefined> {
+    const result = await db.select().from(achievements).where(eq(achievements.id, id));
+    return result[0];
+  }
+
+  async createAchievement(achievement: InsertAchievement): Promise<Achievement> {
+    const result = await db.insert(achievements).values(achievement).returning();
+    return result[0];
+  }
+
+  async updateAchievement(id: number, achievement: Partial<InsertAchievement>): Promise<Achievement | undefined> {
+    const result = await db.update(achievements).set(achievement).where(eq(achievements.id, id)).returning();
+    return result[0];
+  }
+
+  async deleteAchievement(id: number): Promise<void> {
+    await db.delete(achievements).where(eq(achievements.id, id));
   }
 }
 

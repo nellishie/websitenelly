@@ -38,6 +38,17 @@ export const cvFiles = pgTable("cv_files", {
   isActive: boolean("is_active").notNull().default(false),
 });
 
+export const achievements = pgTable("achievements", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  issuer: text("issuer").notNull(),
+  date: text("date").notNull(),
+  description: text("description"),
+  imageUrl: text("image_url").notNull(),
+  category: text("category").notNull(),
+  order: integer("order").notNull().default(0),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -46,6 +57,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
 export const insertExperienceSchema = createInsertSchema(experiences).omit({ id: true });
 export const insertSkillSchema = createInsertSchema(skills).omit({ id: true });
 export const insertCvFileSchema = createInsertSchema(cvFiles).omit({ id: true, uploadedAt: true });
+export const insertAchievementSchema = createInsertSchema(achievements).omit({ id: true });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -55,3 +67,5 @@ export type Skill = typeof skills.$inferSelect;
 export type InsertSkill = z.infer<typeof insertSkillSchema>;
 export type CvFile = typeof cvFiles.$inferSelect;
 export type InsertCvFile = z.infer<typeof insertCvFileSchema>;
+export type Achievement = typeof achievements.$inferSelect;
+export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
