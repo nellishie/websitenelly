@@ -74,6 +74,7 @@ app.use((req, res, next) => {
 
 async function seedDatabaseIfEmpty() {
   try {
+    log('Checking database and seeding if empty...');
     const experiences = await storage.getExperiences();
     const skills = await storage.getSkills();
     const achievements = await storage.getAchievements();
@@ -272,7 +273,15 @@ async function seedDatabaseIfEmpty() {
       }
       log('Achievements seeded successfully');
     }
+    
+    // Re-query to get accurate counts after seeding
+    const finalExperiences = await storage.getExperiences();
+    const finalSkills = await storage.getSkills();
+    const finalAchievements = await storage.getAchievements();
+    
+    log('Database check complete. Experiences: ' + finalExperiences.length + ', Skills: ' + finalSkills.length + ', Achievements: ' + finalAchievements.length);
   } catch (error) {
-    log(`Error seeding database:`, error instanceof Error ? error.message : JSON.stringify(error, null, 2));
+    log(`ERROR seeding database:`, error instanceof Error ? error.message : JSON.stringify(error, null, 2));
+    log(`ERROR stack:`, error instanceof Error ? error.stack : '');
   }
 }
