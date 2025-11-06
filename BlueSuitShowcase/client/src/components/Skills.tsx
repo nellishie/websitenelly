@@ -1,37 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Skill } from '@shared/schema';
+import { skills } from '../data/skills';
 
 export default function Skills() {
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchSkills();
-  }, []);
-
-  const fetchSkills = async () => {
-    try {
-      const response = await fetch('/api/skills');
-      if (response.ok) {
-        const data = await response.json();
-        setSkills(data);
-      }
-    } catch (error) {
-      console.error('Error fetching skills:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <section id="skills" className="py-20 bg-muted/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-muted-foreground">Loading skills...</p>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section id="skills" className="py-20 bg-muted/20">

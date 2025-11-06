@@ -1,37 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Experience as ExperienceType } from '@shared/schema';
+import { experiences } from '../data/experiences';
 
 export default function Experience() {
-  const [experiences, setExperiences] = useState<ExperienceType[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchExperiences();
-  }, []);
-
-  const fetchExperiences = async () => {
-    try {
-      const response = await fetch('/api/experiences');
-      if (response.ok) {
-        const data = await response.json();
-        setExperiences(data);
-      }
-    } catch (error) {
-      console.error('Error fetching experiences:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <section id="experience" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-muted-foreground">Loading experiences...</p>
-        </div>
-      </section>
-    );
-  }
 
   const education = [
     {

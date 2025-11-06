@@ -1,38 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Achievement as AchievementType } from '@shared/schema';
+import { useState } from 'react';
+import { achievements } from '../data/achievements';
 
 export default function Achievements() {
-  const [achievements, setAchievements] = useState<AchievementType[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCertificate, setSelectedCertificate] = useState<AchievementType | null>(null);
-
-  useEffect(() => {
-    fetchAchievements();
-  }, []);
-
-  const fetchAchievements = async () => {
-    try {
-      const response = await fetch('/api/achievements');
-      if (response.ok) {
-        const data = await response.json();
-        setAchievements(data);
-      }
-    } catch (error) {
-      console.error('Error fetching achievements:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <section id="achievements" className="py-20 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-muted-foreground">Loading achievements...</p>
-        </div>
-      </section>
-    );
-  }
+  const [selectedCertificate, setSelectedCertificate] = useState<typeof achievements[0] | null>(null);
 
   const categories = Array.from(new Set(achievements.map(a => a.category)));
 
