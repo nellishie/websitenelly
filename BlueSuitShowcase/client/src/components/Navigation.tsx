@@ -61,13 +61,6 @@ export default function Navigation() {
             >
               Achievements
             </button>
-            <button 
-              onClick={() => scrollToSection('contact')} 
-              className="nav-link text-foreground hover:text-primary transition-colors"
-              data-testid="nav-contact"
-            >
-              Contact
-            </button>
           </div>
           <div className="md:hidden">
             <button 
@@ -101,9 +94,6 @@ export default function Navigation() {
               </button>
               <button onClick={() => scrollToSection('achievements')} className="nav-link text-left text-foreground hover:text-primary transition-colors">
                 Achievements
-              </button>
-              <button onClick={() => scrollToSection('contact')} className="nav-link text-left text-foreground hover:text-primary transition-colors">
-                Contact
               </button>
             </div>
           </div>
