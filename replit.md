@@ -15,7 +15,7 @@ Preferred communication style: Simple, everyday language.
 **Framework and Build Tools**
 - React 18 with TypeScript for type-safe component development
 - Vite as the build tool and development server for fast hot module replacement
-- Component-based architecture with modular sections (Hero, About, Services, Skills, Experience, Achievements, Contact, Footer)
+- Component-based architecture with modular sections (Hero, About, Services, Skills, Experience, Achievements, Footer)
 
 **UI Component System**
 - shadcn/ui design system built on Radix UI primitives for accessible, composable components
@@ -31,7 +31,6 @@ Preferred communication style: Simple, everyday language.
 **Key Features**
 - Typewriter animation effect for role titles in hero section
 - Smooth scroll navigation between sections
-- Rate-limited contact form with email integration
 - Admin panel with keyboard shortcut access (Ctrl+Shift+A)
 - CV download functionality
 - Achievements gallery with certificate display and modal detail view
@@ -45,7 +44,6 @@ Preferred communication style: Simple, everyday language.
 
 **API Design**
 - RESTful endpoints for CRUD operations on experiences and skills
-- Contact form submission endpoint with rate limiting (5 requests per 15 minutes)
 - Admin-protected routes using password-based authentication via headers
 
 **Development Setup**
@@ -54,7 +52,6 @@ Preferred communication style: Simple, everyday language.
 - Custom logging middleware for API request monitoring
 
 **Route Structure**
-- `/api/contact` - Contact form submissions
 - `/api/experiences` - Experience CRUD operations
 - `/api/skills` - Skills CRUD operations
 - `/api/achievements` - Achievements and certifications retrieval
@@ -109,10 +106,6 @@ Preferred communication style: Simple, everyday language.
 - Zod: Schema validation for forms and API requests
 - drizzle-zod: Type-safe schema generation from Drizzle schemas
 
-**Email Service**
-- Replit Mail API integration for contact form submissions
-- Server-side email sending to portfolio owner
-- Authentication via Replit identity tokens
 
 **Database and ORM**
 - Drizzle ORM: Type-safe database queries
